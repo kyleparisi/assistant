@@ -1,0 +1,21 @@
+@import "color";
+
+$color-theme: "indigo";
+$secondary-color: "pink";
+
+/**
+ * Global
+ */
+$background-color: color("grey", 800);
+
+$color: color("grey", 600);
+$font-family: hack, sans-serif;
+$font-size: 16px;
+$font-weight: 300;
+$padding: 30px;
+
+$bar-background-color: color($color-theme, 700);
+$bar-border-color: color($color-theme, 300);
+
+$card-background: white;
+$input-height: 80px;

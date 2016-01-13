@@ -1,0 +1,17 @@
+{
+  "name": "assistant",
+  "version": "0.0.1",
+  "description": "A web (electron) based terminal",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "app": "gulp sass:watch & electron ."
+  },
+  "author": "Kyle Parisi",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-clean": "^0.3.1",
+    "gulp-sass": "^2.1.1"
+  }
+}
