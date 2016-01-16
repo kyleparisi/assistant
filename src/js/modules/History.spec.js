@@ -1,0 +1,66 @@
+/**
+ * Created by kyleparisi on 1/14/16.
+ */
+
+import assert from 'assert'
+import Immutable from 'immutable'
+import HistoryManager from './History'
+
+let history = new HistoryManager()
+
+describe('History', () => {
+
+    describe('push', () => {
+        it('should return false on undefined push call', () => {
+            assert(!history.push())
+        })
+
+        it('should push a string command', () => {
+            assert.equal(history.push('test').index, 2)
+            assert.equal(history.push('ls').index, 3)
+        })
+    })
+
+    describe('forward', () => {
+        it('should return blank string at last index', () => {
+            assert.equal(history.forward().get('command'), '')
+        })
+    })
+
+    describe('backward', () => {
+        it('should return ls', () => {
+            assert.equal(history.backward().get('command'), 'ls')
+        })
+        it('should return test', () => {
+            assert.equal(history.backward().get('command'), 'test')
+        })
+        it('should return blank string', () => {
+            assert.equal(history.backward().get('command'), '')
+        })
+    })
+
+    describe('forward', () => {
+        it('should return test', () => {
+            assert.equal(history.forward().get('command'), 'test')
+        })
+    })
+
+    describe('clear', () => {
+        it('should reset history', () => {
+            assert.equal(history.clear().index, 1)
+            assert.equal(history.forward().get('command'), '')
+            assert.equal(history.backward().get('command'), '')
+            assert.equal(history.clear().index, 1)
+        })
+    })
+
+    describe('local storage', () => {
+        it('should instantiate with local storage data', () => {
+            let persistedHistory = new HistoryManager([{command: ''},{command: 'test'}])
+            assert.equal(persistedHistory.state.get(1).get('command'), 'test')
+            assert.equal(persistedHistory.forward().get('command'), '')
+            assert.equal(persistedHistory.backward().get('command'), 'test')
+            assert.equal(persistedHistory.backward().get('command'), '')
+        })
+    })
+})
