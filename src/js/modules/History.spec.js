@@ -63,4 +63,13 @@ describe('History', () => {
             assert.equal(persistedHistory.backward().get('command'), '')
         })
     })
+
+    describe('jump to', () => {
+        it('should jump to an index', () => {
+            history.push('ls')
+            history.push('ls -la')
+            assert.equal(history.jumpTo(1).get('command'), 'ls')
+            assert.equal(history.jumpTo(2).get('command'), 'ls -la')
+        })
+    })
 })
