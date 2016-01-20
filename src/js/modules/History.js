@@ -2,11 +2,11 @@
  * Created by kyleparisi on 1/13/16.
  */
 
-import Immutable from 'immutable'
+import {List, Map} from 'immutable'
 
 const History = Symbol();
 const HistoryIndex = Symbol();
-const BlankCommand = Immutable.Map({ command: '' })
+const BlankCommand = Map({ command: '' })
 
 /**
  * History manager is an immmutable list of immutable maps.
@@ -16,7 +16,7 @@ class HistoryManager {
     constructor(json) {
 
         if (json === undefined) {
-            this[History] = Immutable.List([])
+            this[History] = List([])
             this[History] = this[History].push(BlankCommand)
             this[HistoryIndex] = this[History].count()
         } else {
@@ -24,7 +24,7 @@ class HistoryManager {
                 json = JSON.parse(json)
             }
 
-            this[History] = Immutable.List(json).map(obj => Immutable.Map(obj))
+            this[History] = List(json).map(obj => Map(obj))
             this[HistoryIndex] = this[History].count()
         }
 
@@ -56,7 +56,8 @@ class HistoryManager {
      */
     push(item) {
         if (item === undefined) return false
-        this[History] = this[History].push(Immutable.Map({ command: item }))
+        item = Map.isMap(item) ? item : Map(item)
+        this[History] = this[History].push(item)
         this[HistoryIndex] = this[History].count()
         return this
     }

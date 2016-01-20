@@ -3,7 +3,7 @@
  */
 
 import assert from 'assert'
-import Immutable from 'immutable'
+import {Map} from 'immutable'
 import HistoryManager from './History'
 
 let history = new HistoryManager()
@@ -15,9 +15,9 @@ describe.skip('History', () => {
             assert(!history.push())
         })
 
-        it('should push a string command', () => {
-            assert.equal(history.push('test').index, 2)
-            assert.equal(history.push('ls').index, 3)
+        it('should push a command object', () => {
+            assert.equal(history.push(Map({command: 'test'})).index, 2)
+            assert.equal(history.push(Map({command: 'ls'})).index, 3)
         })
     })
 
@@ -66,8 +66,8 @@ describe.skip('History', () => {
 
     describe('jump to', () => {
         it('should jump to an index', () => {
-            history.push('ls')
-            history.push('ls -la')
+            history.push(Map({command: 'ls'}))
+            history.push(Map({command: 'ls -la'}))
             assert.equal(history.jumpTo(1).get('command'), 'ls')
             assert.equal(history.jumpTo(2).get('command'), 'ls -la')
         })
