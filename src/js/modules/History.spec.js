@@ -8,7 +8,7 @@ import HistoryManager from './History'
 
 let history = new HistoryManager()
 
-describe('History', () => {
+describe.skip('History', () => {
 
     describe('push', () => {
         it('should return false on undefined push call', () => {

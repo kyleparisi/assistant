@@ -2,7 +2,7 @@
  * Created by kyleparisi on 1/17/16.
  */
 
-import {List} from 'immutable'
+import {List, Map} from 'immutable'
 
 const Cards = Symbol()
 
@@ -25,7 +25,8 @@ class CardManager {
      */
     add(card) {
         if (! card) return this
-        this[Cards] = this[Cards].push(card)
+        card = Map.isMap(card) ? card : Map(card)
+        this[Cards] = this[Cards].push(Map(card))
         return this
     }
 

@@ -2,7 +2,9 @@
  * Created by kyleparisi on 1/17/16.
  */
 
-import {List} from 'immutable'
+import {List, Map} from 'immutable'
+import cards from './CardManager'
+import keycode from 'keycode'
 
 const Plugins = Symbol()
 
@@ -25,21 +27,25 @@ class PluginManager {
      */
     add(plugin) {
         if (! plugin) return this
+        plugin = Map.isMap(plugin) ? plugin : Map(plugin)
         this[Plugins] = this[Plugins].push(plugin)
         return this
     }
 
     /**
-     * Get a list of commands to be executed based on regex
-     * @param command [Regex]
-     * @param key [Int] Keyboard key
-     * @returns {Array|Iterable<K, M>|*|{}}
+     * Run command against plugins regex, then execute the fn property, attach both the output and message
+     * to the return plugin.
+     * @param command
+     * @param key
+     * @returns {Array|Immutable.Iterable<K, M>|*|{}}
      */
     commands(command, key) {
-        return this[Plugins].map((plugin) => {
+        return this[Plugins].map(plugin => {
             let message = plugin.get('exp').exec(command)
-            if (message !== null && plugin.get('key') === key) {
-                return plugin.get('callback')
+            if (message !== null && keycode(plugin.get('key')) === keycode(key)) {
+                plugin = plugin.set('output', plugin.get('fn')(message))
+                plugin = plugin.set('message', message)
+                return plugin
             }
         })
     }
