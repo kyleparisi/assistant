@@ -12,10 +12,19 @@
         <div class="input__icon">
             <span class="fa fa-terminal">>_</span>
         </div>
-        <input id="input" autofocus type="text" placeholder="Type your commands here...">
+        <input id="input" autofocus type="text" placeholder="Type your commands here..." onkeyup="input(this, event)">
     </div>
     <div class="output" id="output"></div>
 </div>
+
+<script>
+    var robot = require('./dist/js/robot');
+    var cardManager = require('./dist/js/CardManager');
+    var pluginManager = require('./dist/js/PluginManager');
+    function input(el, input) {
+        robot.hear(el.value, input.keyCode);
+    }
+</script>
 
 </body>
 </html>

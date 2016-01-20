@@ -36,8 +36,9 @@ class CardManager {
      * @returns {*}
      */
     type(type) {
+        if (this[Cards].count() === 0 || type === undefined) return
         return this[Cards].filter(map => map.get('type') === type).get(0).get('template')
     }
 }
 
-export default new CardManager()
+module.exports = new CardManager()

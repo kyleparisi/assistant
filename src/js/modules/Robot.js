@@ -10,6 +10,7 @@ import {h, diff, patch} from 'virtual-dom'
 
 const Cards = Symbol()
 const ConfiguredPlugins = Symbol()
+const RootNode = Symbol()
 
 
 class Robot {
@@ -37,10 +38,12 @@ class Robot {
         this[RootNode] = patch(this[RootNode], patches)
     }
 
-    hear(exp, key) {
-        return plugins.commands(exp, key).map(plugin => {
+    hear(input, key) {
+        return plugins.commands(input, key).map(plugin => {
             if (! plugin) return
-            let card = cards.type(plugin.get('card'))(plugin.get('output'))
+            var card = cards.type(plugin.get('card'))
+            if (! card) return
+            card = card(plugin.get('output'))
             this[Cards] = this[Cards].set(-1, card)
             // TODO: add card and message input to history
             this.render()
@@ -48,4 +51,4 @@ class Robot {
     }
 }
 
-export default new Robot()
+module.exports = new Robot()

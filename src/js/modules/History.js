@@ -92,4 +92,4 @@ class HistoryManager {
     }
 }
 
-export default HistoryManager
+module.exports = HistoryManager
