@@ -36,6 +36,7 @@ class CardManager {
      * @returns {*}
      */
     type(type) {
+        // no cards or no type requested, ignore
         if (this[Cards].count() === 0 || type === undefined) return
         return this[Cards].filter(map => map.get('type') === type).get(0).get('template')
     }

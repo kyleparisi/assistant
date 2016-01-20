@@ -2,7 +2,7 @@
  * Created by kyleparisi on 1/18/16.
  */
 
-import {h} from 'virtual-dom'
+var h = require('virtual-dom/h')
 
 module.exports = {
     type: 'blank',

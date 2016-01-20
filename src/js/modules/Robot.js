@@ -6,18 +6,18 @@ import {Map, List} from 'immutable'
 import fs from 'fs'
 import plugins from './PluginManager'
 import cards from './CardManager'
-import {h, diff, patch} from 'virtual-dom'
+import {h, diff, patch, create} from 'virtual-dom'
 
 const Cards = Symbol()
 const ConfiguredPlugins = Symbol()
 const RootNode = Symbol()
 
-
 class Robot {
     constructor(cards, plugins) {
         this[ConfiguredPlugins] = List([])
         this[Cards] = List([])
-        this[RootNode] = h('.list')
+        this[RootNode] = create(h('.list'))
+        document.body.appendChild(this[RootNode])
     }
 
     get rootNode() {
@@ -34,7 +34,7 @@ class Robot {
 
     render() {
         let list = h('.list', this[Cards].toArray())
-        let patches = diff(rootNode, list)
+        let patches = diff(this[RootNode], list)
         this[RootNode] = patch(this[RootNode], patches)
     }
 
