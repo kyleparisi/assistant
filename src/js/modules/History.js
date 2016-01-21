@@ -13,18 +13,18 @@ const BlankCommand = Map({ command: '' })
  * Each map is of the form { command: 'XXXX' }
  */
 class HistoryManager {
-    constructor(json) {
+    constructor(objects) {
 
-        if (json === undefined) {
+        if (objects === undefined) {
             this[History] = List([])
             this[History] = this[History].push(BlankCommand)
             this[HistoryIndex] = this[History].count()
         } else {
-            if (typeof json == "string") {
-                json = JSON.parse(json)
+            if (typeof objects == "string") {
+                objects = JSON.parse(objects)
             }
 
-            this[History] = List(json).map(obj => Map(obj))
+            this[History] = List(objects).map(obj => Map(obj))
             this[HistoryIndex] = this[History].count()
         }
 

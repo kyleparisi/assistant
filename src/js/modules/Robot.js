@@ -7,28 +7,45 @@ import fs from 'fs'
 import plugins from './PluginManager'
 import cards from './CardManager'
 import {h, diff, patch, create} from 'virtual-dom'
+import HistoryManager from './History'
 
 const Cards = Symbol()
 const ConfiguredPlugins = Symbol()
 const RootNode = Symbol()
+const AppHistory = Symbol()
+const CommandHistory = Symbol()
 
 class Robot {
-    constructor(cards, plugins) {
+    constructor() {
         this[ConfiguredPlugins] = List([])
         this[Cards] = List([])
         this[RootNode] = create(h('.list'))
         document.body.appendChild(this[RootNode])
+        this[AppHistory] = new HistoryManager([{
+            input: '',
+            output: '',
+            cards: this[Cards]
+        }])
+        this[CommandHistory] = new HistoryManager()
     }
 
     get rootNode() {
         return this[RootNode]
     }
 
-    get plugins() {
+    get appHistory() {
+        return this[AppHistory]
+    }
+
+    get commandHistory() {
+        return this[CommandHistory]
+    }
+
+    static get plugins() {
         return plugins
     }
 
-    get cards () {
+    static get cards () {
         return cards
     }
 
@@ -46,9 +63,16 @@ class Robot {
             card = card(plugin.get('output'))
             this[Cards] = this[Cards].set(-1, card)
             // TODO: add card and message input to history
+            this[AppHistory].push(Map({
+                input: input,
+                output: plugin.get('output'),
+                cards: this[Cards]
+            }))
+            this[CommandHistory].push({ command: input })
             this.render()
         })
     }
+
 }
 
 module.exports = new Robot()
