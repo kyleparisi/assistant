@@ -41,7 +41,7 @@ class PluginManager {
      */
     commands(command, key) {
         return this[Plugins].map(plugin => {
-            let message = plugin.get('exp').exec(command)
+            let message = (plugin.get('exp')) ? plugin.get('exp').exec(command) : null
             if (message !== null && plugin.get('key') === keycode(key)) {
                 plugin = plugin.set('output', plugin.get('fn')(message))
                 plugin = plugin.set('message', message)

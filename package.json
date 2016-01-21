@@ -1,5 +1,6 @@
 {
   "name": "assistant",
+  "productName": "Assistant",
   "version": "0.0.1",
   "description": "A web (electron) based terminal",
   "main": "main.js",
