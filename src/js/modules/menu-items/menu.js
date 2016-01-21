@@ -15,13 +15,15 @@ var menus = function (robot) {
                     label: 'Undo',
                     accelerator: 'CmdOrCtrl+Z',
                     click: function () {
-                        console.log(robot.appHistory.backward())
+                        robot.undoAppState()
                     }
                 },
                 {
                     label: 'Redo',
                     accelerator: 'Shift+CmdOrCtrl+Z',
-                    role: 'redo'
+                    click: function () {
+                        robot.redoAppState()
+                    }
                 },
                 {
                     type: 'separator'

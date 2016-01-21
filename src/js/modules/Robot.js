@@ -20,7 +20,7 @@ class Robot {
         this[ConfiguredPlugins] = List([])
         this[Cards] = List([])
         this[RootNode] = create(h('.list'))
-        document.body.appendChild(this[RootNode])
+        document.getElementById('output').appendChild(this[RootNode])
         this[AppHistory] = new HistoryManager([{
             input: '',
             output: '',
@@ -41,12 +41,28 @@ class Robot {
         return this[CommandHistory]
     }
 
-    static get plugins() {
+    get plugins() {
         return plugins
     }
 
-    static get cards () {
+    get cards () {
         return cards
+    }
+
+    undoAppState() {
+        this[AppHistory].backward()
+        let index = this[AppHistory].index
+        this[Cards] = this[AppHistory].state.get(index).get('cards')
+        this.render()
+        return this
+    }
+
+    redoAppState() {
+        this[AppHistory].forward()
+        let index = this[AppHistory].index
+        this[Cards] = this[AppHistory].state.get(index).get('cards')
+        this.render()
+        return this
     }
 
     render() {
