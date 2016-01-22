@@ -77,8 +77,7 @@ class Robot {
             var card = cards.type(plugin.get('card'))
             if (! card) return
             card = card(plugin.get('output'))
-            this[Cards] = this[Cards].set(-1, card)
-            // TODO: add card and message input to history
+            this[Cards] = this[Cards].unshift(card)
             this[AppHistory].push(Map({
                 input: input,
                 output: plugin.get('output'),
