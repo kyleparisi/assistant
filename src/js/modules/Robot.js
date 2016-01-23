@@ -49,22 +49,29 @@ class Robot {
     undoAppState() {
         this[AppHistory].backward()
         let index = this[AppHistory].index
-        this[Cards] = this[AppHistory].state.get(index).get('cards')
-        this.render()
+        let state = this[AppHistory].state.get(index)
+        console.log(index, this[AppHistory].state.count())
+        if (state === undefined) return this.render(index)
+        this[Cards] = state.get('cards')
+        this.render(index)
         return this
     }
 
     redoAppState() {
         this[AppHistory].forward()
         let index = this[AppHistory].index
-        this[Cards] = this[AppHistory].state.get(index).get('cards')
-        this.render()
+        let state = this[AppHistory].state.get(index)
+        console.log(index, state)
+        if (! state) return this.render(index)
+        this[Cards] = state.get('cards')
+        this.render(index)
         return this
     }
 
-    render() {
-        let index = this[AppHistory].index - 1
-        this[Render].update(this[AppHistory].state.get(index).get('input'), this[AppHistory].state.get(index).get('cards').toArray())
+    render(index) {
+        let state = this[AppHistory].state.get(index)
+        if (! state) return
+        this[Render].update(state.get('input'), state.get('cards').toArray())
     }
 
     hear(input, key) {
@@ -80,7 +87,7 @@ class Robot {
                 cards: this[Cards]
             }))
             this[CommandHistory].push({ command: input })
-            this.render()
+            this.render(this[AppHistory].index - 1)
         })
     }
 

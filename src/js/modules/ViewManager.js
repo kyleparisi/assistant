@@ -22,8 +22,9 @@ class ViewManager {
                         autofocus: true,
                         type: 'text',
                         placeholder: 'Type your commands here...',
-                        onkeyup: function(e) {robot.hear(this.value, e.keyCode)}
-                    }, command)
+                        onkeyup: function(e) {robot.hear(this.value, e.keyCode)},
+                        value: command
+                    })
                 ]),
                     h('.output', cards)])
         }
