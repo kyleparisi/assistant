@@ -6,7 +6,6 @@ import {List, Map} from 'immutable'
 
 const History = Symbol();
 const HistoryIndex = Symbol();
-const BlankCommand = Map({ command: '' })
 
 /**
  * History manager is an immmutable list of immutable maps.
@@ -17,15 +16,14 @@ class HistoryManager {
 
         if (objects === undefined) {
             this[History] = List([])
-            this[History] = this[History].push(BlankCommand)
-            this[HistoryIndex] = this[History].count()
+            this[HistoryIndex] = this[History].count() - 1
         } else {
             if (typeof objects == "string") {
                 objects = JSON.parse(objects)
             }
 
             this[History] = List(objects).map(obj => Map(obj))
-            this[HistoryIndex] = this[History].count()
+            this[HistoryIndex] = this[History].count() - 1
         }
 
     }
@@ -69,7 +67,7 @@ class HistoryManager {
     forward() {
         this[HistoryIndex] = Math.min(this[History].count(), ++this[HistoryIndex])
         let next = this[History].get(this[HistoryIndex])
-        return next ? next : BlankCommand
+        return next ? next : null
     }
 
     /**
@@ -79,7 +77,7 @@ class HistoryManager {
     backward() {
         this[HistoryIndex] = Math.max(0, --this[HistoryIndex])
         let history = this[History].get(this[HistoryIndex])
-        return history ? history : BlankCommand
+        return history ? history : null
     }
 
     /**
