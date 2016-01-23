@@ -8,29 +8,26 @@ import plugins from './PluginManager'
 import cards from './CardManager'
 import {h, diff, patch, create} from 'virtual-dom'
 import HistoryManager from './History'
+import ViewManager from './ViewManager'
 
 const Cards = Symbol()
 const ConfiguredPlugins = Symbol()
-const RootNode = Symbol()
 const AppHistory = Symbol()
 const CommandHistory = Symbol()
+const Render = Symbol()
 
 class Robot {
     constructor() {
         this[ConfiguredPlugins] = List([])
         this[Cards] = List([])
-        this[RootNode] = create(h('.list'))
-        document.getElementById('output').appendChild(this[RootNode])
+        this[Render] = new ViewManager(this)
+
         this[AppHistory] = new HistoryManager([{
             input: '',
             output: '',
             cards: this[Cards]
         }])
         this[CommandHistory] = new HistoryManager()
-    }
-
-    get rootNode() {
-        return this[RootNode]
     }
 
     get appHistory() {
@@ -66,9 +63,8 @@ class Robot {
     }
 
     render() {
-        let list = h('.list', this[Cards].toArray())
-        let patches = diff(this[RootNode], list)
-        this[RootNode] = patch(this[RootNode], patches)
+        let index = this[AppHistory].index - 1
+        this[Render].update(this[AppHistory].state.get(index).get('input'), this[AppHistory].state.get(index).get('cards').toArray())
     }
 
     hear(input, key) {
@@ -86,6 +82,10 @@ class Robot {
             this[CommandHistory].push({ command: input })
             this.render()
         })
+    }
+
+    input(el, input) {
+       this.hear(el.value, input.keyCode);
     }
 
 }

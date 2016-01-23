@@ -7,15 +7,7 @@
     <link rel="stylesheet" href="dist/css/main.css">
 </head>
 <body>
-<div class="container">
-    <div class="input">
-        <div class="input__icon">
-            <span class="fa fa-terminal">>_</span>
-        </div>
-        <input id="input" autofocus type="text" placeholder="Type your commands here..." onkeyup="input(this, event)">
-    </div>
-    <div class="output" id="output"></div>
-</div>
+
 <script>
     var robot = require('./dist/js/robot');
     require('./src/js/modules/menu-items/menu')(robot);
@@ -35,9 +27,6 @@
     dynamicLoad(cards, 'cards');
     dynamicLoad(plugins, 'plugins');
 
-    function input(el, input) {
-        robot.hear(el.value, input.keyCode);
-    }
 </script>
 
 </body>
