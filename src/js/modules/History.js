@@ -85,7 +85,7 @@ class HistoryManager {
      * @returns {HistoryManager}
      */
     clear() {
-        this[History] = this[History].clear().push(BlankCommand)
+        this[History] = this[History].clear()
         this[HistoryIndex] = this[History].count()
         return this
     }

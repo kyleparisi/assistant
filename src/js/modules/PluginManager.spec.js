@@ -6,7 +6,7 @@ import assert from 'assert'
 import plugins from './PluginManager'
 import {Map} from 'immutable'
 
-describe.skip('Plugin Manager', () => {
+describe('Plugin Manager', () => {
     describe('add', () => {
         it('should ignore undefined plugin', () => {
             assert.equal(plugins.add().state.count(), 0)
@@ -19,7 +19,7 @@ describe.skip('Plugin Manager', () => {
 
     describe('commands', () => {
         it('should execute command and return output and message', () => {
-            assert.equal(plugins.commands('log hello world', 'enter').get(0).get('output'), 'hello world')
+            assert.equal(plugins.commands('log hello world', 13).get(0).get('output'), 'hello world')
         })
     })
 })
