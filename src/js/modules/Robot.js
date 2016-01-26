@@ -46,11 +46,28 @@ class Robot {
         return cards
     }
 
+    up() {
+        console.log('up')
+        let state = this[CommandHistory].backward()
+        let index = this[AppHistory].index - 1
+        let appState = this[AppHistory].state.get(index)
+        if (! state) return this
+        this[Render].update(state.get('command'), appState.get('cards').toArray())
+    }
+
+    down() {
+        console.log('down')
+        let state = this[CommandHistory].forward()
+        let index = this[AppHistory].index - 1
+        let appState = this[AppHistory].state.get(index)
+        if (! state) return this
+        this[Render].update(state.get('command'), appState.get('cards').toArray())
+    }
+
     undoAppState() {
         this[AppHistory].backward()
         let index = this[AppHistory].index
         let state = this[AppHistory].state.get(index)
-        console.log(index, this[AppHistory].state.count())
         if (state === undefined) return this.render(index)
         this[Cards] = state.get('cards')
         this.render(index)
@@ -61,7 +78,6 @@ class Robot {
         this[AppHistory].forward()
         let index = this[AppHistory].index
         let state = this[AppHistory].state.get(index)
-        console.log(index, state)
         if (! state) return this.render(index)
         this[Cards] = state.get('cards')
         this.render(index)
