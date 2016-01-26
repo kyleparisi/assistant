@@ -6,7 +6,8 @@
 
 const electron = require('electron');
 const app = electron.app;
-const globalShortcut = require('global-shortcut');
+const Menu = electron.Menu;
+const menuTemplate = require('./src/js/modules/menu-items/menu');
 
 const BrowserWindow = electron.BrowserWindow;
 
@@ -22,8 +23,8 @@ function createWindow() {
         mainWindow.openDevTools({detach: false});
     }
 
-    globalShortcut.register('CmdOrCtrl+z', () => webContents.send('undo'));
-    globalShortcut.register('CmdOrCtrl+Shift+z', () => webContents.send('redo'));
+    var menu = Menu.buildFromTemplate(menuTemplate(webContents, app.getName()));
+    Menu.setApplicationMenu(menu);
 
     mainWindow.on('closed', function () {
         mainWindow = null;

@@ -2,11 +2,7 @@
  * Created by kyleparisi on 1/20/16.
  */
 
-const remote = require('electron').remote;
-const app = remote.app;
-const Menu = remote.Menu;
-
-var menus = function (robot) {
+var template = function (webContents, name) {
     var template = [
         {
             label: 'Edit',
@@ -15,14 +11,14 @@ var menus = function (robot) {
                     label: 'Undo',
                     accelerator: 'CmdOrCtrl+Z',
                     click: function () {
-                        robot.undoAppState()
+                        webContents.send('undo')
                     }
                 },
                 {
                     label: 'Redo',
                     accelerator: 'Shift+CmdOrCtrl+Z',
                     click: function () {
-                        robot.redoAppState()
+                        webContents.send('redo')
                     }
                 },
                 {
@@ -120,7 +116,6 @@ var menus = function (robot) {
     ];
 
     if (process.platform == 'darwin') {
-        var name = app.getName();
         template.unshift({
             label: name,
             submenu: [
@@ -176,9 +171,9 @@ var menus = function (robot) {
             }
         );
 
-        var menu = Menu.buildFromTemplate(template);
-        Menu.setApplicationMenu(menu);
     }
+    return template;
 }
 
-module.exports = menus
+
+module.exports = template;
