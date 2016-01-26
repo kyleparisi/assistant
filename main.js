@@ -6,19 +6,24 @@
 
 const electron = require('electron');
 const app = electron.app;
+const globalShortcut = require('global-shortcut');
 
 const BrowserWindow = electron.BrowserWindow;
 
-var mainWindow;
+var mainWindow, webContents;
 
 function createWindow() {
     mainWindow = new BrowserWindow({width: 800, height: 600});
+    webContents = mainWindow.webContents;
 
     mainWindow.loadURL('file://' + __dirname + '/index.html');
 
     if (process.env.NODE_ENV === 'development') {
         mainWindow.openDevTools({detach: false});
     }
+
+    globalShortcut.register('CmdOrCtrl+z', () => webContents.send('undo'));
+    globalShortcut.register('CmdOrCtrl+Shift+z', () => webContents.send('redo'));
 
     mainWindow.on('closed', function () {
         mainWindow = null;

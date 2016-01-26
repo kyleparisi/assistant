@@ -29,6 +29,9 @@
 
     var template = require('./src/js/modules/interaction-tests/command-history')(robot);
 
+
+    require('electron').ipcRenderer.on('undo', function() { robot.undoAppState() });
+    require('electron').ipcRenderer.on('redo', function() { robot.redoAppState() });
 </script>
 
 <script>

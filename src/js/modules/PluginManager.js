@@ -26,7 +26,7 @@ class PluginManager {
      * @returns {PluginManager}
      */
     add(plugin) {
-        if (! plugin) return this
+        if (! plugin && typeof plugin === 'object') return this
         plugin = Map.isMap(plugin) ? plugin : Map(plugin)
         this[Plugins] = this[Plugins].push(plugin)
         return this
