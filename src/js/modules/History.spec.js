@@ -16,8 +16,8 @@ describe('History', () => {
         })
 
         it('should push a command object', () => {
-            assert.equal(history.push(Map({command: 'test'})).index, 1)
-            assert.equal(history.push(Map({command: 'ls'})).index, 2)
+            assert.equal(history.push(Map({command: 'test'})).index, 0)
+            assert.equal(history.push(Map({command: 'ls'})).index, 1)
         })
     })
 

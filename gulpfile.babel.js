@@ -62,7 +62,7 @@ gulp.task('run', () => {
     runElectronApp(__dirname);
 })
 
-gulp.task('browser-sync', ['babel:watch'], cb => {
+gulp.task('browser-sync', ['babel', 'babel:watch'], cb => {
 
     function getRootUrl(options) {
         const port = options.get('port');

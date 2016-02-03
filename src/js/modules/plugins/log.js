@@ -9,7 +9,7 @@ module.exports = {
     key: 'enter',
     card: 'blank',
     fn: x => {
-        console.log(x[1])
+        console.log(x[1] + '\n')
         return x[1]
     }
 }

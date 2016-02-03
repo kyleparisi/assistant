@@ -28,11 +28,20 @@ class HistoryManager {
 
     }
 
+    get model() {
+        return this[History]
+    }
+
     get state() {
         return this[History]
     }
 
     get index() {
+        // edges
+        if (this[HistoryIndex] === this[History].count()) {
+            return Math.max(--this[HistoryIndex], 0)
+        }
+        // in between
         return this[HistoryIndex]
     }
 
@@ -54,8 +63,11 @@ class HistoryManager {
      */
     push(item) {
         if (item === undefined) return false
-        item = Map.isMap(item) ? item : Map(item)
-        this[History] = this[History].push(item)
+
+        if (!Map.isMap(item) && !List.isList(item)) item = Map(item)
+        if (Map.isMap(item)) this[History] = this[History].push(item)
+        if (List.isList(item)) this[History] = item
+
         this[HistoryIndex] = this[History].count()
         return this
     }
