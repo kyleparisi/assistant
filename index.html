@@ -7,15 +7,43 @@
     <link rel="stylesheet" href="dist/css/main.css">
 </head>
 <body>
-<div class="container">
-    <div class="input">
-        <div class="input__icon">
-            <span class="fa fa-terminal">>_</span>
-        </div>
-        <input id="input" autofocus type="text" placeholder="Type your commands here...">
-    </div>
-    <div class="output" id="output"></div>
-</div>
+
+<script>
+    var robot = require('./dist/js/robot');
+    var fs = require('fs');
+    var path = require('path');
+
+    var cards = process.cwd() + '/src/js/modules/cards';
+    var plugins = process.cwd() + '/src/js/modules/plugins';
+
+    function dynamicLoad(dir, type) {
+        fs.readdirSync(dir).map(function(file) {
+            var fullPath = path.join(dir, file);
+            robot[type].add(require(fullPath));
+        });
+    }
+
+    dynamicLoad(cards, 'cards');
+    dynamicLoad(plugins, 'plugins');
+
+    var template = require('./src/js/modules/interaction-tests/command-history')(robot);
+
+
+    require('electron').ipcRenderer.on('undo', function() { robot.undoAppState() });
+    require('electron').ipcRenderer.on('redo', function() { robot.redoAppState() });
+</script>
+
+<script>
+
+    if (process.env.BROWSER_SYNC_CLIENT_URL && process.env.NODE_ENV === 'development') {
+        const current = document.currentScript;
+        const script = document.createElement('script');
+        script.src = process.env.BROWSER_SYNC_CLIENT_URL;
+        script.async = true;
+        current.parentNode.insertBefore(script, current);
+    }
+
+</script>
 
 </body>
 </html>

@@ -2,7 +2,7 @@
  * Created by kyleparisi on 1/20/16.
  */
 
-var menus = function (robot) {
+var template = function (webContents, name) {
     var template = [
         {
             label: 'Edit',
@@ -11,14 +11,14 @@ var menus = function (robot) {
                     label: 'Undo',
                     accelerator: 'CmdOrCtrl+Z',
                     click: function () {
-                        robot.undoAppState();
+                        webContents.send('undo')
                     }
                 },
                 {
                     label: 'Redo',
                     accelerator: 'Shift+CmdOrCtrl+Z',
                     click: function () {
-                        robot.redoAppState()
+                        webContents.send('redo')
                     }
                 },
                 {
@@ -102,22 +102,6 @@ var menus = function (robot) {
             ]
         },
         {
-            label: 'History',
-            role: 'history',
-            submenu: [
-                {
-                    label: 'Previous command',
-                    accelerator: 'Up',
-                    click: function () { robot.up() }
-                },
-                {
-                    label: 'Next command',
-                    accelerator: 'Down',
-                    click: function () { robot.down() }
-                }
-            ]
-        },
-        {
             label: 'Help',
             role: 'help',
             submenu: [
@@ -132,7 +116,6 @@ var menus = function (robot) {
     ];
 
     if (process.platform == 'darwin') {
-        var name = 'Assistant';
         template.unshift({
             label: name,
             submenu: [
@@ -189,10 +172,8 @@ var menus = function (robot) {
         );
 
     }
-
     return template;
-
 }
 
 
-module.exports = menus
+module.exports = template;

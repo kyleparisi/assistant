@@ -2,27 +2,28 @@
  * Created by kyleparisi on 1/13/16.
  */
 
-import Immutable from 'immutable'
+import {List, Map} from 'immutable'
 
 const History = Symbol();
 const HistoryIndex = Symbol();
-const BlankCommand = Immutable.Map({ command: '' })
 
+/**
+ * History manager is an immmutable list of immutable maps.
+ * Each map is of the form { command: 'XXXX' }
+ */
 class HistoryManager {
-    constructor(json) {
+    constructor(objects) {
 
-        if (json === undefined) {
-            this[History] = Immutable.List([])
-            this[History] = this[History].push(BlankCommand)
-            this[HistoryIndex] = this[History].count()
+        if (objects === undefined) {
+            this[History] = List([])
+            this[HistoryIndex] = this[History].count() - 1
         } else {
-            if (typeof json == "string") {
-                json = JSON.parse(json)
+            if (typeof objects == "string") {
+                objects = JSON.parse(objects)
             }
 
-            this[History] = Immutable.List(json).map(obj => Immutable.Map(obj))
-            this[HistoryIndex] = this[History].count()
-            console.log(this[History])
+            this[History] = List(objects).map(obj => Map(obj))
+            this[HistoryIndex] = this[History].count() - 1
         }
 
     }
@@ -35,30 +36,59 @@ class HistoryManager {
         return this[HistoryIndex]
     }
 
+    /**
+     * Change the index to the provided id
+     * @param id [Integer]
+     */
+    jumpTo(id) {
+        var id = Math.min(this[History].count(), id)
+        id = Math.max(0, id)
+        this[HistoryIndex] = id
+        return this[History].get(id)
+    }
+
+    /**
+     * Push an item to the history
+     * @param item [String]
+     * @returns {*}
+     */
     push(item) {
         if (item === undefined) return false
-        this[History] = this[History].push(Immutable.Map({ command: item }))
+        item = Map.isMap(item) ? item : Map(item)
+        this[History] = this[History].push(item)
         this[HistoryIndex] = this[History].count()
         return this
     }
 
+    /**
+     * Move the index forward and return that index entry
+     * @returns {*|any|Map<K, V>|Map<string, V>}
+     */
     forward() {
         this[HistoryIndex] = Math.min(this[History].count(), ++this[HistoryIndex])
         let next = this[History].get(this[HistoryIndex])
-        return next ? next : BlankCommand
+        return next ? next : null
     }
 
+    /**
+     * Move the index backward and return that index entry
+     * @returns {*|any|Map<K, V>|Map<string, V>}
+     */
     backward() {
         this[HistoryIndex] = Math.max(0, --this[HistoryIndex])
         let history = this[History].get(this[HistoryIndex])
-        return history ? history : BlankCommand
+        return history ? history : null
     }
 
+    /**
+     * Reset the history to a blank list
+     * @returns {HistoryManager}
+     */
     clear() {
-        this[History] = this[History].clear().push(BlankCommand)
+        this[History] = this[History].clear()
         this[HistoryIndex] = this[History].count()
         return this
     }
 }
 
-export default HistoryManager
+module.exports = HistoryManager
